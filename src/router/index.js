@@ -31,10 +31,11 @@ const router = createRouter({
   routes
 })
 
-// Защита
 router.beforeEach((to, from, next) => {
   const isAuth = !!localStorage.getItem('authToken')
+  
   if (to.meta.requiresAuth && !isAuth) {
+    // Если нет токена, редирект на логин с сохранением from.fullPath
     next({ name: 'Login', query: { redirect: to.fullPath } })
   } else if (to.meta.guestOnly && isAuth) {
     next({ name: 'Dashboard' })
